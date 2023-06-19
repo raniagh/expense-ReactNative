@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ManageExpense from "./screens/ManageExpense";
 import { GlobalStyles } from "./constants/styles";
 import { Ionicons } from "@expo/vector-icons";
+import IconButton from "./components/UI/IconButton";
 
 const Stack = createStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -19,6 +20,14 @@ function ExpensesOverview() {
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            name="add"
+            color={tintColor}
+            size={24}
+            onPress={() => {}}
+          />
+        ),
       }}
     >
       <BottomTabs.Screen

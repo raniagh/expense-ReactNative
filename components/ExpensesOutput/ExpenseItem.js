@@ -1,22 +1,28 @@
 import { View, Text, StyleSheet } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import { Pressable } from "react-native";
+import { getFormattedDate } from "../../util/date";
+
+function expressPressHandler() {}
 
 function ExpenseItem({ description, date, price }) {
   return (
-    <View style={styles.expenseItem}>
-      <Pressable>
+    <Pressable
+      onPress={expressPressHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
+      <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>
             {description}
           </Text>
-          <Text style={styles.textBase}>{date.toString()}</Text>
+          <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text style={styles.amount}>${price}</Text>
+          <Text style={styles.amount}>${price.toFixed(2)}</Text>
         </View>
-      </Pressable>
-    </View>
+      </View>
+    </Pressable>
   );
 }
 export default ExpenseItem;
@@ -36,6 +42,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.4,
   },
+  pressed: {
+    opacity: 0.75,
+  },
   textBase: {
     color: GlobalStyles.colors.primary50,
   },
@@ -51,6 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
+    minWidth: 80,
   },
   amount: {
     color: GlobalStyles.colors.primary500,
