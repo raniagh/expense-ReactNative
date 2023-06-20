@@ -4,9 +4,16 @@ import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
 import Button from "../components/UI/Button";
 import { useExpense } from "../store/context/ExpenseContext";
+import { useDispatch } from "react-redux";
+import {
+  addExpense,
+  removeExpense,
+  updateExpense,
+} from "../store/redux/expenses";
 
 function ManageExpense({ route, navigation }) {
-  const expenseCtx = useExpense();
+  //const expenseCtx = useExpense();
+  const dispatch = useDispatch();
   const editedExpenseId = route.params?.expenseId;
 
   //if editedExpenseId value exist so isEditing will get true as a value
@@ -19,7 +26,7 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   function deleteHandler() {
-    expenseCtx.removeExpense(editedExpenseId);
+    dispatch(removeExpense(editedExpenseId));
     navigation.goBack();
   }
   function cancelHandler() {
@@ -27,17 +34,34 @@ function ManageExpense({ route, navigation }) {
   }
   function confirmHandler() {
     if (isEditing) {
-      expenseCtx.updateExpense(editedExpenseId, {
+      dispatch(
+        updateExpense({
+          id: editedExpenseId,
+          data: {
+            description: "test!!",
+            amount: 15.23,
+            date: new Date("2022-05-26"),
+          },
+        })
+      );
+      /* expenseCtx.updateExpense(editedExpenseId, {
         description: "test!!",
         amount: 15.23,
         date: new Date("2022-05-26"),
-      });
+      }); */
     } else {
-      expenseCtx.addExpense({
+      dispatch(
+        addExpense({
+          description: "test",
+          amount: 12.23,
+          date: new Date("2022-05-13"),
+        })
+      );
+      /*  expenseCtx.addExpense({
         description: "test",
         amount: 12.23,
         date: new Date("2022-05-13"),
-      });
+      }); */
     }
     navigation.goBack();
   }
