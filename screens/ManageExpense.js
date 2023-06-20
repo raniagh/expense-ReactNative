@@ -3,8 +3,10 @@ import { StyleSheet, View } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
 import Button from "../components/UI/Button";
+import { useExpense } from "../store/context/ExpenseContext";
 
 function ManageExpense({ route, navigation }) {
+  const expenseCtx = useExpense();
   const editedExpenseId = route.params?.expenseId;
 
   //if editedExpenseId value exist so isEditing will get true as a value
@@ -16,9 +18,16 @@ function ManageExpense({ route, navigation }) {
     });
   }, [navigation, isEditing]);
 
-  function deleteHandler() {}
-  function cancelHandler() {}
-  function confirmHandler() {}
+  function deleteHandler() {
+    expenseCtx.removeExpense(editedExpenseId);
+    navigation.goBack();
+  }
+  function cancelHandler() {
+    navigation.goBack();
+  }
+  function confirmHandler() {
+    navigation.goBack();
+  }
 
   return (
     <View style={styles.container}>

@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
+import { Text } from "react-native";
 
 function Button({ children, onPress, mode, style }) {
   return (
