@@ -10,6 +10,7 @@ import {
   removeExpense,
   updateExpense,
 } from "../store/redux/expenses";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 function ManageExpense({ route, navigation }) {
   const expenseCtx = useExpense();
@@ -69,6 +70,7 @@ function ManageExpense({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <ExpenseForm />
       <View style={styles.buttons}>
         <Button style={styles.button} mode="flat" onPress={cancelHandler}>
           Cancel
