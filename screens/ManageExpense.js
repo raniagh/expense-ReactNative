@@ -26,6 +26,19 @@ function ManageExpense({ route, navigation }) {
     navigation.goBack();
   }
   function confirmHandler() {
+    if (isEditing) {
+      expenseCtx.updateExpense(editedExpenseId, {
+        description: "test!!",
+        amount: 15.23,
+        date: new Date("2022-05-26"),
+      });
+    } else {
+      expenseCtx.addExpense({
+        description: "test",
+        amount: 12.23,
+        date: new Date("2022-05-13"),
+      });
+    }
     navigation.goBack();
   }
 
