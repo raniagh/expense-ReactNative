@@ -12,8 +12,8 @@ import {
 } from "../store/redux/expenses";
 
 function ManageExpense({ route, navigation }) {
-  //const expenseCtx = useExpense();
-  const dispatch = useDispatch();
+  const expenseCtx = useExpense();
+  //const dispatch = useDispatch();
   const editedExpenseId = route.params?.expenseId;
 
   //if editedExpenseId value exist so isEditing will get true as a value
@@ -26,7 +26,8 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   function deleteHandler() {
-    dispatch(removeExpense(editedExpenseId));
+    expenseCtx.removeExpense(editedExpenseId);
+    //dispatch(removeExpense(editedExpenseId));
     navigation.goBack();
   }
   function cancelHandler() {
@@ -34,7 +35,12 @@ function ManageExpense({ route, navigation }) {
   }
   function confirmHandler() {
     if (isEditing) {
-      dispatch(
+      expenseCtx.updateExpense(editedExpenseId, {
+        description: "test!!",
+        amount: 15.23,
+        date: new Date("2022-05-26"),
+      });
+      /*  dispatch(
         updateExpense({
           id: editedExpenseId,
           data: {
@@ -43,25 +49,20 @@ function ManageExpense({ route, navigation }) {
             date: new Date("2022-05-26"),
           },
         })
-      );
-      /* expenseCtx.updateExpense(editedExpenseId, {
-        description: "test!!",
-        amount: 15.23,
-        date: new Date("2022-05-26"),
-      }); */
+      ); */
     } else {
-      dispatch(
+      expenseCtx.addExpense({
+        description: "test",
+        amount: 12.23,
+        date: new Date("2022-05-13"),
+      });
+      /*  dispatch(
         addExpense({
           description: "test",
           amount: 12.23,
           date: new Date("2022-05-13"),
         })
-      );
-      /*  expenseCtx.addExpense({
-        description: "test",
-        amount: 12.23,
-        date: new Date("2022-05-13"),
-      }); */
+      ); */
     }
     navigation.goBack();
   }

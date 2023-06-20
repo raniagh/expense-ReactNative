@@ -3,10 +3,10 @@ import ExpensesOutput from "../components/ExpensesOutput/ExpensesOutput";
 import { useExpense } from "../store/context/ExpenseContext";
 
 function AllExpenses() {
-  //const expensesCtx = useExpense();
-  //const expenses = expensesCtx.expenses;
+  const expensesCtx = useExpense();
+  const expenses = expensesCtx.expenses;
 
-  const expenses = useSelector((state) => state.expense);
+  //const expenses = useSelector((state) => state.expense);
 
   return (
     <ExpensesOutput
