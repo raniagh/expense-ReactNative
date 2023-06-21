@@ -14,9 +14,12 @@ import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http.js";
 import { useState } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function ManageExpense({ route, navigation }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState();
+
   const expenseCtx = useExpense();
   //const dispatch = useDispatch();
   const editedExpenseId = route.params?.expenseId;
@@ -36,10 +39,15 @@ function ManageExpense({ route, navigation }) {
 
   async function deleteHandler() {
     setIsSubmitting(true);
-    await deleteExpense(editedExpenseId);
-    expenseCtx.removeExpense(editedExpenseId);
-    //dispatch(removeExpense(editedExpenseId));
-    navigation.goBack();
+    try {
+      await deleteExpense(editedExpenseId);
+      expenseCtx.removeExpense(editedExpenseId);
+      //dispatch(removeExpense(editedExpenseId));
+      navigation.goBack();
+    } catch (error) {
+      setError("Could not remove expense");
+      setIsSubmitting(false);
+    }
   }
   function cancelHandler() {
     navigation.goBack();
@@ -47,11 +55,10 @@ function ManageExpense({ route, navigation }) {
 
   async function confirmHandler(expenseData) {
     setIsSubmitting(true);
-    if (isEditing) {
-      expenseCtx.updateExpense(editedExpenseId, expenseData);
-      await updateExpense(editedExpenseId, expenseData);
-
-      /*  dispatch(
+    try {
+      if (isEditing) {
+        expenseCtx.updateExpense(editedExpenseId, expenseData);
+        /*  dispatch(
         updateExpense({
           id: editedExpenseId,
           data: {
@@ -61,22 +68,33 @@ function ManageExpense({ route, navigation }) {
           },
         })
       ); */
-    } else {
-      const id = await storeExpense(expenseData);
-      expenseCtx.addExpense({ ...expenseData, id: id });
-      /*  dispatch(
+        await updateExpense(editedExpenseId, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        expenseCtx.addExpense({ ...expenseData, id: id });
+        /*  dispatch(
         addExpense({
           description: "test",
           amount: 12.23,
           date: new Date("2022-05-13"),
         })
       ); */
+      }
+      navigation.goBack();
+    } catch (error) {
+      setError("Could not update expense");
+      setIsSubmitting(false);
     }
-    navigation.goBack();
   }
 
+  function errorHandler() {
+    setError(null);
+  }
   if (isSubmitting) {
     return <LoadingOverlay />;
+  }
+  if (error && !isSubmitting) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
   }
 
   return (
