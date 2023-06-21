@@ -1,8 +1,10 @@
 const ExpenseReducer = (state, action) => {
   switch (action.type) {
     case "ADD_EXPENSE":
-      const id = new Date().toString() + Math.random().toString();
-      return [{ ...action.payload, id: id }, ...state];
+      return [action.payload, ...state];
+    case "SET":
+      const inverted = action.payload.reverse();
+      return inverted;
     case "UPDATE_EXPENSE":
       const updatableExpenseIndex = state.findIndex(
         (expense) => expense.id === action.payload.id

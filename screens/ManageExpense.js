@@ -11,7 +11,7 @@ import {
   updateExpense,
 } from "../store/redux/expenses";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
-import { storeExpense } from "../util/httpjs";
+import { storeExpense } from "../util/http.js";
 
 function ManageExpense({ route, navigation }) {
   const expenseCtx = useExpense();
@@ -39,7 +39,8 @@ function ManageExpense({ route, navigation }) {
   function cancelHandler() {
     navigation.goBack();
   }
-  function confirmHandler(expenseData) {
+
+  async function confirmHandler(expenseData) {
     if (isEditing) {
       expenseCtx.updateExpense(editedExpenseId, expenseData);
       /*  dispatch(
@@ -53,8 +54,8 @@ function ManageExpense({ route, navigation }) {
         })
       ); */
     } else {
-      storeExpense(expenseData);
-      expenseCtx.addExpense(expenseData);
+      const id = await storeExpense(expenseData);
+      expenseCtx.addExpense({ ...expenseData, id: id });
       /*  dispatch(
         addExpense({
           description: "test",
