@@ -87,14 +87,11 @@ function ManageExpense({ route, navigation }) {
     }
   }
 
-  function errorHandler() {
-    setError(null);
-  }
   if (isSubmitting) {
     return <LoadingOverlay />;
   }
   if (error && !isSubmitting) {
-    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
+    return <ErrorOverlay message={error} />;
   }
 
   return (
