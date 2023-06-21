@@ -5,13 +5,13 @@ import { GlobalStyles } from "../constants/styles";
 import Button from "../components/UI/Button";
 import { useExpense } from "../store/context/ExpenseContext";
 import { useDispatch } from "react-redux";
-import {
+/* import {
   addExpense,
   removeExpense,
   updateExpense,
-} from "../store/redux/expenses";
+} from "../store/redux/expenses"; */
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
-import { storeExpense } from "../util/http.js";
+import { deleteExpense, storeExpense, updateExpense } from "../util/http.js";
 
 function ManageExpense({ route, navigation }) {
   const expenseCtx = useExpense();
@@ -31,7 +31,8 @@ function ManageExpense({ route, navigation }) {
     });
   }, [navigation, isEditing]);
 
-  function deleteHandler() {
+  async function deleteHandler() {
+    await deleteExpense(editedExpenseId);
     expenseCtx.removeExpense(editedExpenseId);
     //dispatch(removeExpense(editedExpenseId));
     navigation.goBack();
@@ -43,6 +44,7 @@ function ManageExpense({ route, navigation }) {
   async function confirmHandler(expenseData) {
     if (isEditing) {
       expenseCtx.updateExpense(editedExpenseId, expenseData);
+      await updateExpense(editedExpenseId, expenseData);
       /*  dispatch(
         updateExpense({
           id: editedExpenseId,
