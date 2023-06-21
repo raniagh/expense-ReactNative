@@ -12,8 +12,11 @@ import { useDispatch } from "react-redux";
 } from "../store/redux/expenses"; */
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { deleteExpense, storeExpense, updateExpense } from "../util/http.js";
+import { useState } from "react";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 function ManageExpense({ route, navigation }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const expenseCtx = useExpense();
   //const dispatch = useDispatch();
   const editedExpenseId = route.params?.expenseId;
@@ -32,6 +35,7 @@ function ManageExpense({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteHandler() {
+    setIsSubmitting(true);
     await deleteExpense(editedExpenseId);
     expenseCtx.removeExpense(editedExpenseId);
     //dispatch(removeExpense(editedExpenseId));
@@ -42,9 +46,11 @@ function ManageExpense({ route, navigation }) {
   }
 
   async function confirmHandler(expenseData) {
+    setIsSubmitting(true);
     if (isEditing) {
       expenseCtx.updateExpense(editedExpenseId, expenseData);
       await updateExpense(editedExpenseId, expenseData);
+
       /*  dispatch(
         updateExpense({
           id: editedExpenseId,
@@ -67,6 +73,10 @@ function ManageExpense({ route, navigation }) {
       ); */
     }
     navigation.goBack();
+  }
+
+  if (isSubmitting) {
+    return <LoadingOverlay />;
   }
 
   return (
