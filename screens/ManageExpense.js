@@ -11,6 +11,7 @@ import {
   updateExpense,
 } from "../store/redux/expenses";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { storeExpense } from "../util/httpjs";
 
 function ManageExpense({ route, navigation }) {
   const expenseCtx = useExpense();
@@ -52,6 +53,7 @@ function ManageExpense({ route, navigation }) {
         })
       ); */
     } else {
+      storeExpense(expenseData);
       expenseCtx.addExpense(expenseData);
       /*  dispatch(
         addExpense({
